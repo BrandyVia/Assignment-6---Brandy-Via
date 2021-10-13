@@ -1,0 +1,53 @@
+---
+title: "Transportation Model"
+author: "Brandy Via"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  html_notebook:
+    highlight: textmate
+    theme: cerulean
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+dir.create("images")
+```
+
+# Dummy Warehouse
+## Production scheduling for Heart Start.
+
+In this problem, the total production is 220, while the total demands are only 210. So, we create a dummy warehouse. 
+
+* The variables xij refer to production at plant i for delivery to warehouse j
+* Note that the objective function coefficients include the cost of production
+* As it is not possible to deliver to a nonexistent warehouse, the coefficients for the dummy warehouse have been set to zero.
+* The complete formulation is below.
+
+```
+/* Objective function */
+min: 622 x11 + 614 x12 + 630 x13 + 0 x14 + 641 x21 + 645 x22 + 649 x23 + 0x24;
+
+/* Constraints */
+x11 + x12 + x13 + x14  = 100;
+x21 + x22 + x23 + x24  = 120;
+x11 + x21 = 80;
+x12 + x22 = 60;
+x13 + x23 = 70;
+x14 + x24 = 10;
+```
+```{r}
+library(lpSolveAPI)
+y <- read.lp("HeartStart.lp")
+y
+```
+
+Solve the problem.
+```{r}
+solve(y)
+get.objective(y)
+get.variables(y)
+```
+
